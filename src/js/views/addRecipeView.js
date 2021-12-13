@@ -16,9 +16,14 @@ class AddRecipeView extends View {
   }
 
   toggleWindow() {
-    if (this._window.className.includes('hidden')) this._renderAddRecipeForm();
-    this._overlay.classList.toggle('hidden');
+    if (this._window.classList.contains('hidden')) {
+      this._removeSpinnerAndError();
+      this._clear();
+      this._renderAddRecipeForm();
+    }
+
     this._window.classList.toggle('hidden');
+    this._overlay.classList.toggle('hidden');
   }
 
   addHandlerUpload(handler) {
@@ -37,6 +42,22 @@ class AddRecipeView extends View {
   _addHandlerHideWindow() {
     this._btnClose.addEventListener('click', this.toggleWindow.bind(this));
     this._overlay.addEventListener('click', this.toggleWindow.bind(this));
+  }
+
+  renderSpinner() {
+    this._removeSpinnerAndError();    
+    this._window.insertAdjacentHTML('afterbegin', this._generateSpinnerMarkup());
+  }
+
+  renderError(message = this._errorMessage) {
+    this._removeSpinnerAndError();
+    this._window.insertAdjacentHTML('afterbegin', this._generateErrorMarkup(message));
+  }
+
+  renderMessage(message = this._message) {
+    this._removeSpinnerAndError();
+    this._clear();
+    this._parentEl.insertAdjacentHTML('afterbegin', this._generateMessageMarkup(message));
   }
 
   _renderAddRecipeForm() {
@@ -108,6 +129,11 @@ class AddRecipeView extends View {
 
     this._clear();
     this._parentEl.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  _removeSpinnerAndError() {
+    document.querySelector('.spinner')?.remove();
+    document.querySelector('.error')?.remove();
   }
 }
 

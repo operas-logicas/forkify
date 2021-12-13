@@ -52,19 +52,32 @@ export default class View {
   }
 
   renderSpinner() {
-    const markup = `
+    this._clear();
+    this._parentEl.insertAdjacentHTML('afterbegin', this._generateSpinnerMarkup());
+  }
+
+  renderError(message = this._errorMessage) {
+    this._clear();
+    this._parentEl.insertAdjacentHTML('afterbegin', this._generateErrorMarkup(message));
+  }
+
+  renderMessage(message = this._message) {
+    this._clear();
+    this._parentEl.insertAdjacentHTML('afterbegin', this._generateMessageMarkup(message));
+  }
+
+  _generateSpinnerMarkup() {
+    return `
       <div class="spinner">
         <svg>
           <use href="${icons}#icon-loader"></use>
         </svg>
       </div>
     `;
-    this._clear();
-    this._parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
-  renderError(message = this._errorMessage) {
-    const markup = `
+  _generateErrorMarkup(message) {
+    return `
       <div class="error">
         <div>
           <svg>
@@ -74,13 +87,10 @@ export default class View {
         <p>${message}</p>
       </div>
     `;
-
-    this._clear();
-    this._parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
-  renderMessage(message = this._message) {
-    const markup = `
+  _generateMessageMarkup(message) {
+    return `
       <div class="message">
         <div>
           <svg>
@@ -90,9 +100,6 @@ export default class View {
         <p>${message}</p>
       </div>
     `;
-
-    this._clear();
-    this._parentEl.insertAdjacentHTML('afterbegin', markup);
   }
 
   _clear() {
